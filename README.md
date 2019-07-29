@@ -1,5 +1,8 @@
-#Grace Jammer
+# Grace Jammer
 
-Names:
-Alex
-Daphne Lee
+# Names:
+
+# Joonho Han
+# Alex Yi
+# Daphne Lee
+
