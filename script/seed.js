@@ -1,18 +1,54 @@
 'use strict'
 
 const db = require('../server/db')
-const {User} = require('../server/db/models')
+const { User } = require('../server/db/models')
+const Product = require('../server/db/models/product')
+
+const products = [{
+  name: 'Strawberry Jam',
+  description: 'More fruit and 39% less sugar. Made with the finest natural ingredients, full of large pieces of premium quality strawberries, Gracejammer Strawberry delivers an authentic, homemade taste with just the right touch of sweetness.',
+  price: 9.65,
+  quantity: 200,
+  imageUrl: 'https://mpng.pngfly.com/20190215/uob/kisspng-jam-portable-network-graphics-clip-art-marmalade-d-fraabiecajolinejamjarvicu-7-png-frascos-decor-5c66d67eed2c15.2541012515502434549715.jpg'
+}, {
+  name: 'Blueberry Jam',
+  description: 'The complex, tangy flavor of Gracejammer’s Seedless Blackberry Jam captures the warm, earthy days of late summer. Picked plump and juicy, our blackberries cook into a rich jam with an ideal spoonable texture. Spread on a scone, add to oatmeal, or use as a sauté base for chicken.',
+  price: 9.70,
+  quantity: 200,
+  imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKAhw4Obf3fq0ykIO49yOSJCOAU8bs8_8bToYZ3BP9nvm5N0TN'
+}, {
+  name: 'Blackberry Jam',
+  description: 'Enjoyed throughout history for its uniquely sweet and delicious flavor, blackberries have always been one of our favorites. Using the ripest, juiciest blackberries and a touch of pure cane sugar, this wonderfully light and tasty jam is great on muffins, toast, in hot cereal or on a peanut butter sandwich.',
+  price: 8.75,
+  quantity: 200,
+  imageUrl: 'http://2.bp.blogspot.com/_-aUbHU82SDM/TFdLswOV8LI/AAAAAAAAB7o/QjYaunMb874/s640/Jam.jpg'
+}, {
+  name: 'Apricot Jam',
+  description: 'Gracejammer Apricot Preserves glow with the orange-yellow luster of fresh, ripe apricots. Each jar is filled with large pieces of apricots making every bite a delicious treat. Try it on toast, muffins, in a recipe or as part of a sauce.',
+  price: 9.65,
+  quantity: 200,
+  imageUrl: 'https://us.123rf.com/450wm/kamenuka/kamenuka1505/kamenuka150500006/39953530-stock-vector-apricot-jam-honey-mason-jar-watercolor-hand-painted-.jpg?ver=6'
+}, {
+  name: 'Concord Grape Jam',
+  description: 'Concord grape is the national j̶e̶l̶l̶y̶ jam. With its deep purple color and robust sweetness, Concord grape is quintessential for our beloved PB&J. It\'s been 160 years since the variety was developed in Concord, Mass, and the annual U.S. harvest is now 400,000 tons. That\'s a lot of peanut butter and j̶e̶l̶l̶y̶ jam sandwiches. Yum. Among superfruits, Concord grape is an unsung hero. The USDA reports that Concord grape juice has almost as much antioxidant activity as blueberry juice! We use concentrated Concord grape juice in this super Premium Spread.',
+  price: 8.50,
+  quantity: 200,
+  imageUrl: 'https://png.pngtree.com/png-clipart/20190118/ourmid/pngtree-hand-painted-cartoon-delicious-luster-png-image_445278.jpg'
+}]
 
 async function seed() {
-  await db.sync({force: true})
+  await db.sync({ force: true })
   console.log('db synced!')
 
   const users = await Promise.all([
-    User.create({email: 'cody@email.com', password: '123'}),
-    User.create({email: 'murphy@email.com', password: '123'})
+    User.create({ email: 'cody@email.com', password: '123' }),
+    User.create({ email: 'murphy@email.com', password: '123' })
   ])
 
-  console.log(`seeded ${users.length} users`)
+  await Promise.all(products.map(product => {
+    return Product.create(product);
+  }))
+
   console.log(`seeded successfully`)
 }
 
