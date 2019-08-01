@@ -1,10 +1,35 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {fetchOrders} from '../store/orders'
+import {fetchOrders, removeFromCartThunk} from '../store/orders'
 
 export class Cart extends Component {
+  constructor(props) {
+    super(props)
+
+    this.handleClick = this.handleClick.bind(this)
+  }
+
   componentDidMount() {
     this.props.fetchOrders()
+  }
+
+  handleClick(jamId) {
+    const orderIdPlz = this.props.orders.find(
+      order => !order.status && order.userId === this.props.user.id
+    ).id
+
+    console.log('lloooookk', orderIdPlz)
+    console.log('jammmmm', jamId)
+
+    this.props.removeFromCart(
+      //Number(
+      //   this.props.orders.find(
+      //     order => !order.status && order.userId === this.props.user.id
+      //   ).id
+      orderIdPlz,
+      //)
+      jamId
+    )
   }
 
   render() {
@@ -19,6 +44,9 @@ export class Cart extends Component {
                 <div>Name: {jam.name}</div>
                 <img src={jam.imageUrl} />
                 <div>Quantity: {jam.orderDetail.quantity}</div>
+                <button onClick={() => this.handleClick(jam.id)} type="submit">
+                  Remove from Cart
+                </button>
               </li>
             )
           })}
@@ -36,7 +64,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchOrders: id => dispatch(fetchOrders(id))
+  fetchOrders: id => dispatch(fetchOrders(id)),
+  removeFromCart: (orderId, productId) =>
+    dispatch(removeFromCartThunk(orderId, productId))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart)
