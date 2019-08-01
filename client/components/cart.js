@@ -25,7 +25,7 @@ export class Cart extends Component {
         </ul>
       </div>
     ) : (
-      <div>Cart is empty!</div>
+      <div>Cart is empty! Visit View All Jams page to add jams to cart!</div>
     )
   }
 }
