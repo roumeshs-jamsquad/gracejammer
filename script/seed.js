@@ -3,6 +3,8 @@
 const db = require('../server/db')
 const {User} = require('../server/db/models')
 const Product = require('../server/db/models/product')
+const Order = require('../server/db/models/order')
+const OrderDetail = require('../server/db/models/orderDetail')
 
 const products = [
   {
@@ -52,6 +54,42 @@ const products = [
   }
 ]
 
+const orders = [
+  {
+    userId: 1,
+    status: true
+  },
+  {
+    userId: 2,
+    status: false
+  },
+  {
+    userId: 1,
+    status: false
+  }
+]
+
+const orderDetails = [
+  {
+    orderId: 1,
+    productId: 5,
+    quantity: 5,
+    price: 4825
+  },
+  {
+    orderId: 1,
+    productId: 3,
+    quantity: 10,
+    price: 8750
+  },
+  {
+    orderId: 2,
+    productId: 1,
+    quantity: 7,
+    price: 6755
+  }
+]
+
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
@@ -64,6 +102,18 @@ async function seed() {
   await Promise.all(
     products.map(product => {
       return Product.create(product)
+    })
+  )
+
+  await Promise.all(
+    orders.map(order => {
+      return Order.create(order)
+    })
+  )
+
+  await Promise.all(
+    orderDetails.map(orderDetail => {
+      return OrderDetail.create(orderDetail)
     })
   )
 
