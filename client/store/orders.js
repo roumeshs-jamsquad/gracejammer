@@ -13,10 +13,10 @@ const getOrders = orders => {
 }
 
 //Thunks
-export const fetchOrders = id => {
+export const fetchOrders = () => {
   return async dispatch => {
     try {
-      const {data} = await axios.get(`/api/users/${id}/orders`)
+      const {data} = await axios.get(`/api/orders`)
       dispatch(getOrders(data))
     } catch (err) {
       console.error(err)

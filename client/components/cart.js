@@ -1,23 +1,23 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import fetchOrders from '../store/orders'
+import {fetchOrders} from '../store/orders'
 
 export class Cart extends Component {
   componentDidMount() {
-    this.props.fetchOrders(Number(this.props.user.id))
+    this.props.fetchOrders()
   }
 
   render() {
-    const {orders} = this.props
-    const cart = orders.filter(order => !order.status)
-    return cart.products ? (
+    const {orders, user} = this.props
+    let cart = orders.find(order => order.userId === user.id && !order.status)
+    return cart ? (
       <div>
         <ul>
           {cart.products.map(jam => {
             return (
               <li key={jam.id}>
-                <img src={jam.imageUrl} />
                 <div>Name: {jam.name}</div>
+                <img src={jam.imageUrl} />
                 <div>Quantity: {jam.orderDetail.quantity}</div>
               </li>
             )
@@ -25,7 +25,7 @@ export class Cart extends Component {
         </ul>
       </div>
     ) : (
-      <div>loading...</div>
+      <div>Cart is empty!</div>
     )
   }
 }
