@@ -10,7 +10,7 @@ export class Cart extends Component {
   render() {
     const {orders, user} = this.props
     let cart = orders.find(order => order.userId === user.id && !order.status)
-    return cart ? (
+    return cart && cart.products.length > 0 ? (
       <div>
         <ul>
           {cart.products.map(jam => {
