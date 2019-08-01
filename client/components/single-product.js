@@ -15,9 +15,12 @@ class SingleProduct extends Component {
 
   handleAdd(evt) {
     evt.preventDefault()
-    console.log(this.props.orders.find(order => !order.status).id)
     this.props.addToCartThunk({
-      orderId: Number(this.props.orders.find(order => !order.status).id),
+      orderId: Number(
+        this.props.orders.find(
+          order => !order.status && order.userId === this.props.user.id
+        ).id
+      ),
       productId: Number(this.props.match.params.id),
       quantity: Number(this.state.quantity)
     })
