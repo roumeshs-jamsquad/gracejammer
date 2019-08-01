@@ -11,14 +11,18 @@ const Product = db.define('product', {
     allowNull: false
   },
   price: {
-    type: Sequelize.DECIMAL(10, 2),
-    allowNull: false
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    get() {
+      return this.getDataValue('price') / 100
+    }
   },
   quantity: {
     type: Sequelize.INTEGER
   },
   imageUrl: {
-    type: Sequelize.STRING
+    type: Sequelize.TEXT,
+    defaultValue: ''
   }
 })
 
