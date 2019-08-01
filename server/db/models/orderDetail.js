@@ -7,7 +7,7 @@ const OrderDetail = db.define('orderDetail', {
   },
   price: {
     type: Sequelize.INTEGER,
-    allowNull: false,
+    // allowNull: false,
     get() {
       return this.getDataValue('price') / 100
     }
