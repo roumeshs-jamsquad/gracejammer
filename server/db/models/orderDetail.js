@@ -6,7 +6,11 @@ const OrderDetail = db.define('orderDetail', {
     type: Sequelize.INTEGER
   },
   price: {
-    type: Sequelize.INTEGER
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    get() {
+      return this.getDataValue('price') / 100
+    }
   }
 })
 
