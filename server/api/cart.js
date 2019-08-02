@@ -22,3 +22,20 @@ router.post('/add', async (req, res, next) => {
     next(err)
   }
 })
+
+router.put('/remove', async (req, res, next) => {
+  try {
+    const removedProduct = await OrderDetail.findOne({
+      where: {
+        orderId: req.body.orderId,
+        productId: req.body.productId
+      }
+    })
+
+    await removedProduct.destroy()
+
+    res.send(removedProduct)
+  } catch (err) {
+    next(err)
+  }
+})

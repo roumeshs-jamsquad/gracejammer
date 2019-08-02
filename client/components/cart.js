@@ -1,10 +1,24 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {fetchOrders} from '../store/orders'
+import {fetchOrders, removeFromCartThunk} from '../store/orders'
 
 export class Cart extends Component {
+  constructor(props) {
+    super(props)
+
+    this.handleClick = this.handleClick.bind(this)
+  }
+
   componentDidMount() {
     this.props.fetchOrders()
+  }
+
+  handleClick(jamId) {
+    const orderId = this.props.orders.find(
+      order => !order.status && order.userId === this.props.user.id
+    ).id
+
+    this.props.removeFromCart(orderId, jamId)
   }
 
   render() {
@@ -19,6 +33,9 @@ export class Cart extends Component {
                 <div>Name: {jam.name}</div>
                 <img src={jam.imageUrl} />
                 <div>Quantity: {jam.orderDetail.quantity}</div>
+                <button onClick={() => this.handleClick(jam.id)} type="submit">
+                  Remove from Cart
+                </button>
               </li>
             )
           })}
@@ -36,7 +53,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchOrders: id => dispatch(fetchOrders(id))
+  fetchOrders: () => dispatch(fetchOrders()),
+  removeFromCart: (orderId, productId) =>
+    dispatch(removeFromCartThunk(orderId, productId))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart)
