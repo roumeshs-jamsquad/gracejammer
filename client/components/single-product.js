@@ -28,7 +28,7 @@ class SingleProduct extends Component {
 
   handleChange(evt) {
     this.setState({
-      quantity: evt.target.value
+      [evt.target.name]: evt.target.value
     })
   }
 
@@ -52,7 +52,10 @@ class SingleProduct extends Component {
           <form onSubmit={this.handleAdd}>
             <div>Quantity: </div>
             <input
-              nametype="text"
+              name="quantity"
+              type="number"
+              min="1"
+              max="30"
               value={this.state.quantity}
               onChange={this.handleChange}
             />
