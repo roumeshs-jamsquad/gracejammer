@@ -14,22 +14,11 @@ export class Cart extends Component {
   }
 
   handleClick(jamId) {
-    const orderIdPlz = this.props.orders.find(
+    const orderId = this.props.orders.find(
       order => !order.status && order.userId === this.props.user.id
     ).id
 
-    console.log('lloooookk', orderIdPlz)
-    console.log('jammmmm', jamId)
-
-    this.props.removeFromCart(
-      //Number(
-      //   this.props.orders.find(
-      //     order => !order.status && order.userId === this.props.user.id
-      //   ).id
-      orderIdPlz,
-      //)
-      jamId
-    )
+    this.props.removeFromCart(orderId, jamId)
   }
 
   render() {
@@ -64,7 +53,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchOrders: id => dispatch(fetchOrders(id)),
+  fetchOrders: () => dispatch(fetchOrders()),
   removeFromCart: (orderId, productId) =>
     dispatch(removeFromCartThunk(orderId, productId))
 })

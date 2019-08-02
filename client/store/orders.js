@@ -42,7 +42,6 @@ export const fetchOrders = () => {
 export const addToCartThunk = product => async dispatch => {
   try {
     const {data} = await axios.post('/api/cart/add', product)
-    console.log(product)
     dispatch(addToCart(data))
   } catch (err) {
     console.error(err)
@@ -51,10 +50,7 @@ export const addToCartThunk = product => async dispatch => {
 
 export const removeFromCartThunk = (orderId, productId) => async dispatch => {
   try {
-    console.log('idssss', orderId, productId)
-
     const {data} = await axios.put('/api/cart/remove', {orderId, productId})
-    console.log('this is data', data)
     dispatch(removeFromCart(data.orderId, data.productId))
   } catch (err) {
     console.error(err)
@@ -68,9 +64,16 @@ export default (orders = defaultOrders, action) => {
     case ADD_TO_CART:
       return [...orders, action.addedItem]
     case REMOVE_FROM_CART:
-      return orders
-        .find(order => action.orderId === order.id)
-        .products.filter(product => action.productId !== product.id)
+      return orders.map(order => {
+        if (action.orderId === order.id) {
+          order.products = order.products.filter(
+            product => action.productId !== product.id
+          )
+          return order
+        } else {
+          return order
+        }
+      })
     default:
       return orders
   }

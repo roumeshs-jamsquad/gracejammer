@@ -25,7 +25,6 @@ router.post('/add', async (req, res, next) => {
 
 router.put('/remove', async (req, res, next) => {
   try {
-    console.log('bodystuff', req.body)
     const removedProduct = await OrderDetail.findOne({
       where: {
         orderId: req.body.orderId,
