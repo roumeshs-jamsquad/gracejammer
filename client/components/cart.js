@@ -5,7 +5,6 @@ import {fetchOrders, removeFromCartThunk} from '../store/orders'
 export class Cart extends Component {
   constructor(props) {
     super(props)
-
     this.handleClick = this.handleClick.bind(this)
   }
 
@@ -25,24 +24,44 @@ export class Cart extends Component {
     const {orders, user} = this.props
     let cart = orders.find(order => order.userId === user.id && !order.status)
     return cart && cart.products.length > 0 ? (
-      <div>
-        <ul>
-          {cart.products.map(jam => {
-            return (
-              <li key={jam.id}>
-                <div>Name: {jam.name}</div>
-                <img src={jam.imageUrl} />
-                <div>Quantity: {jam.orderDetail.quantity}</div>
-                <button onClick={() => this.handleClick(jam.id)} type="submit">
-                  Remove from Cart
-                </button>
-              </li>
-            )
-          })}
-        </ul>
+      <div className=" container">
+        {cart.products.map(jam => {
+          return (
+            <div key={jam.id} className="card mb-3 shadow">
+              <div className="row no-gutters">
+                <div className="col-md-4">
+                  <img src={jam.imageUrl} className="card-img" />
+                </div>
+                <div className="col-md-8">
+                  <div className="card-body text-center">
+                    <h3 className="card-title">{jam.name}</h3>
+                    <p className="card-text">{jam.description}</p>
+                    <h5 className="card-text font-weight-bold">
+                      ${(jam.price * jam.orderDetail.quantity).toFixed(2)}
+                    </h5>
+                    <div className="card-text">
+                      Quantity: {jam.orderDetail.quantity}
+                    </div>
+                  </div>
+                  <div className="text-center mb-3">
+                    <button
+                      onClick={() => this.handleClick(jam.id)}
+                      type="submit"
+                      className="btn btn-danger"
+                    >
+                      Remove from Cart
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
+        })}
       </div>
     ) : (
-      <div>Cart is empty! Visit View All Jams page to add jams to cart!</div>
+      <div className="text-center">
+        Cart is empty! Visit View All Jams page to add jams to cart!
+      </div>
     )
   }
 }
