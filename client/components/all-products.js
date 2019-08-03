@@ -10,19 +10,31 @@ class AllProducts extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1>Look at All This Jam!</h1>
-        {this.props.allProducts.map(product => {
-          return (
-            <div key={product.id}>
-              <Link to={`/products/${product.id}`}>
-                <h2>{product.name}</h2>
-              </Link>
-              <img src={product.imageUrl} />
-              <p>Price: ${product.price}</p>
-            </div>
-          )
-        })}
+      <div className="container">
+        <h1 className="text-center">Look at All This Jam!</h1>
+        <div className="row">
+          {this.props.allProducts.map(product => {
+            return (
+              <div
+                key={product.id}
+                className="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-3"
+              >
+                <div className="card shadow h-100">
+                  <img src={product.imageUrl} className="card-img-top h-75" />
+
+                  <div className="card-body text-center">
+                    <Link to={`/products/${product.id}`} className="card-link">
+                      <p className="card-title">{product.name}</p>
+                    </Link>
+                    <p className="card-text font-weight-bold">
+                      ${product.price.toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
       </div>
     )
   }

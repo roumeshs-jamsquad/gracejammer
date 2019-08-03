@@ -24,6 +24,8 @@ class SingleProduct extends Component {
       productId: Number(this.props.match.params.id),
       quantity: Number(this.state.quantity)
     })
+    this.props.fetchOrders()
+    this.props.history.push('/cart')
   }
 
   handleChange(evt) {
@@ -43,24 +45,37 @@ class SingleProduct extends Component {
       elem => elem.id === Number(this.props.match.params.id)
     )
     return product !== undefined ? (
-      <div>
-        <div>
-          <h2>{product.name}</h2>
-          <img src={product.imageUrl} />
-          <p>{product.description}</p>
-          <p>Price: ${product.price}</p>
-          <form onSubmit={this.handleAdd}>
-            <div>Quantity: </div>
-            <input
-              name="quantity"
-              type="number"
-              min="1"
-              max="30"
-              value={this.state.quantity}
-              onChange={this.handleChange}
-            />
-            <button type="submit">Add To Cart</button>
-          </form>
+      <div className="container">
+        <div className="card shadow">
+          <div className="row no-gutters">
+            <div className="col-md-4">
+              <img src={product.imageUrl} className="card-img" />
+            </div>
+            <div className="col-md-8 text-center">
+              <h2 className="card-title">{product.name}</h2>
+              <p className="card-text">{product.description}</p>
+              <h5 className="card-text font-weight-bold">
+                ${product.price.toFixed(2)}
+              </h5>
+              <form onSubmit={this.handleAdd}>
+                <div className="form-group">
+                  <div className="form-text">Quantity: </div>
+                  <input
+                    name="quantity"
+                    type="number"
+                    min="1"
+                    max="30"
+                    value={this.state.quantity}
+                    onChange={this.handleChange}
+                    className="form-control"
+                  />
+                  <button type="submit" className="btn-secondary my-3">
+                    Add To Cart
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     ) : (

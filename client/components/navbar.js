@@ -5,28 +5,46 @@ import {Link} from 'react-router-dom'
 import {logout} from '../store'
 
 const Navbar = ({handleClick, isLoggedIn}) => (
-  <div>
-    <h1>GRACEJAMMER</h1>
-    <nav>
-      {isLoggedIn ? (
+  <div className="container">
+    <h1 className="text-center">GRACEJAMMER</h1>
+    {isLoggedIn ? (
+      <nav className="navbar navbar-light">
         <div>
-          {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
-          <Link to="/products">View All Jams</Link>
-          <Link to="/cart">Cart</Link>
-          <a href="#" onClick={handleClick}>
+          <Link to="/home" className="nav-item navbar-text">
+            Home
+          </Link>
+          <Link to="/products" className="nav-item navbar-text">
+            View All Jams
+          </Link>
+        </div>
+        <div>
+          <Link to="/cart" className="nav-item navbar-text">
+            Cart
+          </Link>
+          <a href="#" onClick={handleClick} className="navbar-text">
             Logout
           </a>
         </div>
-      ) : (
+      </nav>
+    ) : (
+      <nav className="navbar navbar-light">
+        {/* The navbar will show these links before you log in */}
+        <Link to="/products" className="nav-item navbar-text">
+          View All Jams
+        </Link>
         <div>
-          {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-          <Link to="/products">View All Jams</Link>
+          <Link to="/cart" className="nav-item navbar-text">
+            Cart
+          </Link>
+          <Link to="/login" className="nav-item navbar-text">
+            Login
+          </Link>
+          <Link to="/signup" className="nav-item navbar-text">
+            Sign Up
+          </Link>
         </div>
-      )}
-    </nav>
+      </nav>
+    )}
     <hr />
   </div>
 )
