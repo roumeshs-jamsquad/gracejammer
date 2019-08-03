@@ -5,14 +5,14 @@ import {fetchOrders, removeFromCartThunk} from '../store/orders'
 export class Cart extends Component {
   constructor(props) {
     super(props)
-    this.handleClick = this.handleClick.bind(this)
+    this.handleRemove = this.handleRemove.bind(this)
   }
 
   componentDidMount() {
     this.props.fetchOrders()
   }
 
-  handleClick(jamId) {
+  handleRemove(jamId) {
     const orderId = this.props.orders.find(
       order => !order.status && order.userId === this.props.user.id
     ).id
@@ -42,10 +42,27 @@ export class Cart extends Component {
                     <div className="card-text">
                       Quantity: {jam.orderDetail.quantity}
                     </div>
+                    {/* <form onSubmit={this.handleAdd}>
+                <div className="form-group">
+                  <div className="form-text">Quantity: </div>
+                  <input
+                    name="quantity"
+                    type="number"
+                    min="1"
+                    max="30"
+                    value={this.state.quantity}
+                    onChange={this.handleChange}
+                    className="form-control"
+                  />
+                  <button type="submit" className="btn-secondary my-3">
+                    Add To Cart
+                  </button>
+                </div>
+              </form> */}
                   </div>
                   <div className="text-center mb-3">
                     <button
-                      onClick={() => this.handleClick(jam.id)}
+                      onClick={() => this.handleRemove(jam.id)}
                       type="submit"
                       className="btn btn-danger"
                     >
