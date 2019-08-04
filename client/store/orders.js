@@ -1,10 +1,12 @@
 import axios from 'axios'
+import {runInNewContext} from 'vm'
 
 const defaultOrders = []
 //Action types
 const GET_ORDERS = 'GET_ORDERS'
 const ADD_TO_CART = 'ADD_TO_CART'
 const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
+const UPDATE_CART = 'UPDATE_CART'
 
 //Action creators
 const getOrders = orders => {
@@ -24,6 +26,15 @@ const removeFromCart = (orderId, productId) => {
     type: REMOVE_FROM_CART,
     orderId,
     productId
+  }
+}
+
+const updateCart = (orderId, productId, quantity) => {
+  return {
+    type: UPDATE_CART,
+    orderId,
+    productId,
+    quantity
   }
 }
 
@@ -57,6 +68,24 @@ export const removeFromCartThunk = (orderId, productId) => async dispatch => {
   }
 }
 
+export const updateCartThunk = (
+  orderId,
+  productId,
+  quantity
+) => async dispatch => {
+  try {
+    const {data} = await axios.put('api/cart/update', {
+      orderId,
+      productId,
+      quantity
+    })
+    dispatch(updateCart(data.orderId, data.productId, data.quantity))
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+//Reducer
 export default (orders = defaultOrders, action) => {
   switch (action.type) {
     case GET_ORDERS:
@@ -69,6 +98,21 @@ export default (orders = defaultOrders, action) => {
           order.products = order.products.filter(
             product => action.productId !== product.id
           )
+          return order
+        } else {
+          return order
+        }
+      })
+    case UPDATE_CART:
+      return orders.map(order => {
+        if (action.orderId === order.id) {
+          order.products.map(product => {
+            if (action.productId === product.id) {
+              product.orderDetail.quantity = action.quantity
+              return product
+            } else return product
+          })
+
           return order
         } else {
           return order

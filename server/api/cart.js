@@ -39,3 +39,19 @@ router.put('/remove', async (req, res, next) => {
     next(err)
   }
 })
+
+router.put('/update', async (req, res, next) => {
+  try {
+    const updatedProduct = await OrderDetail.findOne({
+      where: {
+        orderId: req.body.orderId,
+        productId: req.body.productId
+      }
+      //update quantity in products table
+    })
+    await updatedProduct.update(req.body)
+    res.json(updatedProduct)
+  } catch (err) {
+    next(err)
+  }
+})

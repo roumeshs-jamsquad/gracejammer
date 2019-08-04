@@ -1,23 +1,52 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {fetchOrders, removeFromCartThunk} from '../store/orders'
+import {
+  fetchOrders,
+  removeFromCartThunk,
+  updateCartThunk
+} from '../store/orders'
 
 export class Cart extends Component {
   constructor(props) {
     super(props)
-    this.handleClick = this.handleClick.bind(this)
+
+    this.handleRemove = this.handleRemove.bind(this)
   }
 
   componentDidMount() {
     this.props.fetchOrders()
   }
 
-  handleClick(jamId) {
+  handleRemove(jamId) {
     const orderId = this.props.orders.find(
       order => !order.status && order.userId === this.props.user.id
     ).id
 
     this.props.removeFromCart(orderId, jamId)
+  }
+
+  handleUpdate(jamId, quantity) {
+    const orderId = this.props.orders.find(
+      order => !order.status && order.userId === this.props.user.id
+    ).id
+
+    const jamAmount = Number(quantity)
+
+    this.props.updateCart(orderId, jamId, jamAmount)
+  }
+
+  populateSelect() {
+    const maxQty = []
+
+    for (let i = 1; i <= 30; i++) {
+      maxQty.push(
+        <option key={i} value={i}>
+          {i}
+        </option>
+      )
+    }
+
+    return maxQty
   }
 
   render() {
@@ -40,12 +69,20 @@ export class Cart extends Component {
                       ${(jam.price * jam.orderDetail.quantity).toFixed(2)}
                     </h5>
                     <div className="card-text">
-                      Quantity: {jam.orderDetail.quantity}
+                      Quantity: {/*jam.orderDetail.quantity*/}
+                      <select
+                        value={jam.orderDetail.quantity}
+                        onChange={() =>
+                          this.handleUpdate(jam.id, event.target.value)
+                        }
+                      >
+                        {this.populateSelect(jam.orderDetail.quantity)}
+                      </select>
                     </div>
                   </div>
                   <div className="text-center mb-3">
                     <button
-                      onClick={() => this.handleClick(jam.id)}
+                      onClick={() => this.handleRemove(jam.id)}
                       type="submit"
                       className="btn btn-danger"
                     >
@@ -74,7 +111,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   fetchOrders: () => dispatch(fetchOrders()),
   removeFromCart: (orderId, productId) =>
-    dispatch(removeFromCartThunk(orderId, productId))
+    dispatch(removeFromCartThunk(orderId, productId)),
+  updateCart: (orderId, productId, quantity) => {
+    dispatch(updateCartThunk(orderId, productId, quantity))
+  }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart)
