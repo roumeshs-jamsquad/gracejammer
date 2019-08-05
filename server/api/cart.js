@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {OrderDetail} = require('../db/models')
+const {OrderDetail, Order} = require('../db/models')
 module.exports = router
 
 router.post('/add', async (req, res, next) => {
@@ -12,9 +12,12 @@ router.post('/add', async (req, res, next) => {
     })
     if (alreadyInCart) {
       alreadyInCart.quantity += req.body.quantity
+      alreadyInCart.price =
+        alreadyInCart.price * 100 + req.body.price * req.body.quantity
       await alreadyInCart.save()
       return res.json(alreadyInCart)
     } else {
+      req.body.price = req.body.price * req.body.quantity
       const product = await OrderDetail.create(req.body)
       return res.json(product)
     }
@@ -35,6 +38,21 @@ router.put('/remove', async (req, res, next) => {
     await removedProduct.destroy()
 
     res.send(removedProduct)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.put('/checkout', async (req, res, next) => {
+  try {
+    const order = await Order.findByPk(req.body.orderId)
+    order.status = true
+    order.save()
+    await Order.create({
+      status: false,
+      userId: req.session.passport.user
+    })
+    res.json(order)
   } catch (err) {
     next(err)
   }
