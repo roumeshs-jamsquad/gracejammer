@@ -6,6 +6,7 @@ const GET_ORDERS = 'GET_ORDERS'
 const ADD_TO_CART = 'ADD_TO_CART'
 const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
 const CHECKOUT = 'CHECKOUT'
+const UPDATE_CART = 'UPDATE_CART'
 
 //Action creators
 const getOrders = orders => {
@@ -32,6 +33,15 @@ const checkoutOrder = order => ({
   type: CHECKOUT,
   order
 })
+
+const updateCart = (orderId, productId, quantity) => {
+  return {
+    type: UPDATE_CART,
+    orderId,
+    productId,
+    quantity
+  }
+}
 
 //Thunks
 export const fetchOrders = () => {
@@ -72,6 +82,24 @@ export const checkoutThunk = orderId => async dispatch => {
   }
 }
 
+export const updateCartThunk = (
+  orderId,
+  productId,
+  quantity
+) => async dispatch => {
+  try {
+    const {data} = await axios.put('api/cart/update', {
+      orderId,
+      productId,
+      quantity
+    })
+    dispatch(updateCart(data.orderId, data.productId, data.quantity))
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+//Reducer
 export default (orders = defaultOrders, action) => {
   switch (action.type) {
     case GET_ORDERS:
@@ -93,6 +121,21 @@ export default (orders = defaultOrders, action) => {
           order.status = true
           return order
         } else return order
+      })
+    case UPDATE_CART:
+      return orders.map(order => {
+        if (action.orderId === order.id) {
+          order.products.map(product => {
+            if (action.productId === product.id) {
+              product.orderDetail.quantity = action.quantity
+              return product
+            } else return product
+          })
+
+          return order
+        } else {
+          return order
+        }
       })
     default:
       return orders
