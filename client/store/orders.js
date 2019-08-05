@@ -5,6 +5,7 @@ const defaultOrders = []
 const GET_ORDERS = 'GET_ORDERS'
 const ADD_TO_CART = 'ADD_TO_CART'
 const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
+const CHECKOUT = 'CHECKOUT'
 
 //Action creators
 const getOrders = orders => {
@@ -26,6 +27,11 @@ const removeFromCart = (orderId, productId) => {
     productId
   }
 }
+
+const checkoutOrder = order => ({
+  type: CHECKOUT,
+  order
+})
 
 //Thunks
 export const fetchOrders = () => {
@@ -57,6 +63,15 @@ export const removeFromCartThunk = (orderId, productId) => async dispatch => {
   }
 }
 
+export const checkoutThunk = orderId => async dispatch => {
+  try {
+    const {data} = await axios.put('/api/cart/checkout', {orderId})
+    dispatch(checkoutOrder(data))
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 export default (orders = defaultOrders, action) => {
   switch (action.type) {
     case GET_ORDERS:
@@ -70,9 +85,14 @@ export default (orders = defaultOrders, action) => {
             product => action.productId !== product.id
           )
           return order
-        } else {
+        } else return order
+      })
+    case CHECKOUT:
+      return orders.map(order => {
+        if (action.order.id === order.id) {
+          order.status = true
           return order
-        }
+        } else return order
       })
     default:
       return orders
