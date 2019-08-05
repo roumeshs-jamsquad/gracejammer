@@ -1,6 +1,11 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {fetchOrders, removeFromCartThunk, checkoutThunk} from '../store/orders'
+import {
+  fetchOrders,
+  removeFromCartThunk,
+  updateCartThunk,
+  checkoutThunk
+} from '../store/orders'
 
 export class Cart extends Component {
   constructor(props) {
@@ -26,6 +31,29 @@ export class Cart extends Component {
   handleCheckout(orderId) {
     this.props.checkoutThunk(orderId)
     this.props.history.push('/home')
+  }
+  handleUpdate(jamId, quantity) {
+    const orderId = this.props.orders.find(
+      order => !order.status && order.userId === this.props.user.id
+    ).id
+
+    const jamAmount = Number(quantity)
+
+    this.props.updateCart(orderId, jamId, jamAmount)
+  }
+
+  populateSelect() {
+    const maxQty = []
+
+    for (let i = 1; i <= 30; i++) {
+      maxQty.push(
+        <option key={i} value={i}>
+          {i}
+        </option>
+      )
+    }
+
+    return maxQty
   }
 
   render() {
@@ -58,7 +86,15 @@ export class Cart extends Component {
                           ${(jam.price * jam.orderDetail.quantity).toFixed(2)}
                         </h5>
                         <div className="card-text">
-                          Quantity: {jam.orderDetail.quantity}
+                          Quantity:
+                          <select
+                            value={jam.orderDetail.quantity}
+                            onChange={() =>
+                              this.handleUpdate(jam.id, event.target.value)
+                            }
+                          >
+                            {this.populateSelect(jam.orderDetail.quantity)}
+                          </select>
                         </div>
                       </div>
                       <div className="text-center mb-3">
@@ -115,7 +151,10 @@ const mapDispatchToProps = dispatch => ({
   fetchOrders: () => dispatch(fetchOrders()),
   removeFromCart: (orderId, productId) =>
     dispatch(removeFromCartThunk(orderId, productId)),
-  checkoutThunk: orderId => dispatch(checkoutThunk(orderId))
+  checkoutThunk: orderId => dispatch(checkoutThunk(orderId)),
+  updateCart: (orderId, productId, quantity) => {
+    dispatch(updateCartThunk(orderId, productId, quantity))
+  }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart)
