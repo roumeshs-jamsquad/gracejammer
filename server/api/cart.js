@@ -67,7 +67,16 @@ router.put('/update', async (req, res, next) => {
       }
       //update quantity in products table
     })
-    await updatedProduct.update(req.body)
+    const {orderId, productId, quantity, unitPrice} = req.body
+    console.log('body bag ======', orderId, productId, quantity, unitPrice)
+    const convertedSubTotal = quantity * unitPrice * 100
+    console.log('=====> convert subtotal', convertedSubTotal)
+    await updatedProduct.update({
+      orderId,
+      productId,
+      quantity,
+      price: convertedSubTotal
+    })
     res.json(updatedProduct)
   } catch (err) {
     next(err)
