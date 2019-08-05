@@ -9,6 +9,7 @@ class SingleProduct extends Component {
     this.state = {
       quantity: ''
     }
+    this.price = 0
     this.handleChange = this.handleChange.bind(this)
     this.handleAdd = this.handleAdd.bind(this)
   }
@@ -22,7 +23,8 @@ class SingleProduct extends Component {
         ).id
       ),
       productId: Number(this.props.match.params.id),
-      quantity: Number(this.state.quantity)
+      quantity: Number(this.state.quantity),
+      price: Number((this.price * 100).toFixed(2))
     })
     this.props.fetchOrders()
     this.props.history.push('/cart')
@@ -44,6 +46,7 @@ class SingleProduct extends Component {
     const product = products.find(
       elem => elem.id === Number(this.props.match.params.id)
     )
+    if (product) this.price = product.price
     return product !== undefined ? (
       <div className="container">
         <div className="card shadow">
