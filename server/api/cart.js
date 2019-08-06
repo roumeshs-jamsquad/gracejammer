@@ -83,15 +83,14 @@ router.put('/checkout', async (req, res, next) => {
 })
 
 router.put('/update', async (req, res, next) => {
-  const {orderId, productId} = req.body
   try {
+    const {orderId, productId, quantity, unitPrice} = req.body
     const updatedProduct = await OrderDetail.findOne({
       where: {
-        orderId: orderId,
-        productId: productId
+        orderId: req.body.orderId,
+        productId: req.body.productId
       }
     })
-    const {orderId, productId, quantity, unitPrice} = req.body
     const convertedSubTotal = (quantity * unitPrice * 100).toFixed(0)
 
     await updatedProduct.update({
