@@ -67,7 +67,7 @@ router.put('/update', async (req, res, next) => {
       }
     })
     const {orderId, productId, quantity, unitPrice} = req.body
-    const convertedSubTotal = quantity * unitPrice * 100
+    const convertedSubTotal = (quantity * unitPrice * 100).toFixed(0)
 
     await updatedProduct.update({
       orderId,
