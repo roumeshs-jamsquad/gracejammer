@@ -85,13 +85,15 @@ export const checkoutThunk = orderId => async dispatch => {
 export const updateCartThunk = (
   orderId,
   productId,
-  quantity
+  quantity,
+  unitPrice
 ) => async dispatch => {
   try {
     const {data} = await axios.put('api/cart/update', {
       orderId,
       productId,
-      quantity
+      quantity,
+      unitPrice
     })
     dispatch(updateCart(data.orderId, data.productId, data.quantity))
   } catch (err) {
