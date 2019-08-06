@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const {OrderDetail, Order} = require('../db/models')
+const mail = require('./nodemailer')
 module.exports = router
 
 router.post('/add', async (req, res, next) => {
@@ -48,6 +49,7 @@ router.put('/checkout', async (req, res, next) => {
     const order = await Order.findByPk(req.body.orderId)
     order.status = true
     order.save()
+    mail(req.user.email)
     await Order.create({
       status: false,
       userId: req.session.passport.user
