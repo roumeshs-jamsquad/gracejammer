@@ -21,16 +21,18 @@ export class Cart extends Component {
   }
 
   handleClick(jamId) {
-    const orderId = this.props.orders.find(
-      order => !order.status && order.userId === this.props.user.id
+    const {orders, user} = this.props
+    const orderId = orders.find(
+      order => !order.status && order.userId === user.id
     ).id
 
     this.props.removeFromCart(orderId, jamId)
   }
 
   handleCheckout(orderId) {
+    const {history} = this.props
     this.props.checkoutThunk(orderId)
-    this.props.history.push('/home')
+    history.push('/home')
   }
   handleUpdate(jamId, quantity) {
     const orderId = this.props.orders.find(
