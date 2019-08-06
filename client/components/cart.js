@@ -21,25 +21,27 @@ export class Cart extends Component {
   }
 
   handleClick(jamId) {
-    const orderId = this.props.orders.find(
-      order => !order.status && order.userId === this.props.user.id
+    const {orders, user} = this.props
+    const orderId = orders.find(
+      order => !order.status && order.userId === user.id
     ).id
 
     this.props.removeFromCart(orderId, jamId)
   }
 
   handleCheckout(orderId) {
+    const {history} = this.props
     this.props.checkoutThunk(orderId)
-    this.props.history.push('/home')
+    history.push('/home')
   }
-  handleUpdate(jamId, quantity) {
+  handleUpdate(jamId, quantity, jamPrice) {
     const orderId = this.props.orders.find(
       order => !order.status && order.userId === this.props.user.id
     ).id
 
     const jamAmount = Number(quantity)
 
-    this.props.updateCart(orderId, jamId, jamAmount)
+    this.props.updateCart(orderId, jamId, jamAmount, jamPrice)
   }
 
   populateSelect() {
@@ -90,7 +92,11 @@ export class Cart extends Component {
                           <select
                             value={jam.orderDetail.quantity}
                             onChange={() =>
-                              this.handleUpdate(jam.id, event.target.value)
+                              this.handleUpdate(
+                                jam.id,
+                                event.target.value,
+                                jam.price
+                              )
                             }
                           >
                             {this.populateSelect(jam.orderDetail.quantity)}
@@ -152,8 +158,8 @@ const mapDispatchToProps = dispatch => ({
   removeFromCart: (orderId, productId) =>
     dispatch(removeFromCartThunk(orderId, productId)),
   checkoutThunk: orderId => dispatch(checkoutThunk(orderId)),
-  updateCart: (orderId, productId, quantity) => {
-    dispatch(updateCartThunk(orderId, productId, quantity))
+  updateCart: (orderId, productId, quantity, unitPrice) => {
+    dispatch(updateCartThunk(orderId, productId, quantity, unitPrice))
   }
 })
 
