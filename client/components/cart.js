@@ -6,6 +6,7 @@ import {
   updateCartThunk,
   checkoutThunk
 } from '../store/orders'
+import StripeBtn from './StripeBtn'
 
 export class Cart extends Component {
   constructor(props) {
@@ -136,6 +137,8 @@ export class Cart extends Component {
               >
                 Checkout
               </button>
+
+              <StripeBtn />
             </form>
           </div>
         </div>
