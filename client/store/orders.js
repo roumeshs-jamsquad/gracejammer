@@ -107,7 +107,30 @@ export default (orders = defaultOrders, action) => {
     case GET_ORDERS:
       return action.orders
     case ADD_TO_CART:
-      return [...orders, action.addedItem]
+      if (
+        !orders
+          .find(order => order.id === action.addedItem.orderId)
+          .products.find(product => product.id === action.addedItem.productId)
+      ) {
+        return orders.map(order => {
+          if (order.id === action.addedItem.orderId) {
+            order.products = [...order.products, action.addedItem.product]
+            return order
+          } else return order
+        })
+      }
+      return orders.map(order => {
+        if (order.id === action.addedItem.orderId) {
+          order.products.map(product => {
+            if (product.id === action.addedItem.productId) {
+              product.orderDetail = action.addedItem
+              return product
+            } else return product
+          })
+          return order
+        } else return order
+      })
+
     case REMOVE_FROM_CART:
       return orders.map(order => {
         if (action.orderId === order.id) {

@@ -10,11 +10,9 @@ class SingleProduct extends Component {
       quantity: ''
     }
     this.price = 0
-    this.handleChange = this.handleChange.bind(this)
-    this.handleAdd = this.handleAdd.bind(this)
   }
 
-  handleAdd(evt) {
+  handleAdd = evt => {
     evt.preventDefault()
     this.props.addToCartThunk({
       orderId: Number(
@@ -26,13 +24,13 @@ class SingleProduct extends Component {
       quantity: Number(this.state.quantity),
       price: Number((this.price * 100).toFixed(2))
     })
-    this.props.fetchOrders()
     this.props.history.push('/cart')
   }
 
-  handleChange(evt) {
+  handleChange = evt => {
+    const {name, value} = evt.target
     this.setState({
-      [evt.target.name]: evt.target.value
+      [name]: value
     })
   }
 

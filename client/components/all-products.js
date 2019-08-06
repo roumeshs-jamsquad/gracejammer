@@ -9,11 +9,12 @@ class AllProducts extends React.Component {
   }
 
   render() {
+    const {allProducts} = this.props
     return (
       <div className="container">
         <h1 className="text-center">Look at All This Jam!</h1>
         <div className="row">
-          {this.props.allProducts.map(product => {
+          {allProducts.map(product => {
             return (
               <div
                 key={product.id}
