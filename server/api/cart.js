@@ -65,9 +65,16 @@ router.put('/update', async (req, res, next) => {
         orderId: req.body.orderId,
         productId: req.body.productId
       }
-      //update quantity in products table
     })
-    await updatedProduct.update(req.body)
+    const {orderId, productId, quantity, unitPrice} = req.body
+    const convertedSubTotal = quantity * unitPrice * 100
+
+    await updatedProduct.update({
+      orderId,
+      productId,
+      quantity,
+      price: convertedSubTotal
+    })
     res.json(updatedProduct)
   } catch (err) {
     next(err)
