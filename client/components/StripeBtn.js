@@ -1,7 +1,8 @@
 import React, {Fragment} from 'react'
 import StripeCheckout from 'react-stripe-checkout'
 import axios from 'axios'
-
+//https://hackernoon.com/stripe-api-reactjs-and-express-bc446bf08301
+//Article this code was copied from
 const StripeBtn = () => {
   const publishableKey = 'pk_test_JjzeOPJ8ceTQEnODF3ddpPDT00S6kfk4mN'
 
