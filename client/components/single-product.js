@@ -13,17 +13,38 @@ class SingleProduct extends Component {
   }
 
   handleAdd = evt => {
+    const {user, match, products} = this.props
     evt.preventDefault()
-    this.props.addToCartThunk({
-      orderId: Number(
-        this.props.orders.find(
-          order => !order.status && order.userId === this.props.user.id
-        ).id
-      ),
-      productId: Number(this.props.match.params.id),
-      quantity: Number(this.state.quantity),
-      price: Number((this.price * 100).toFixed(2))
-    })
+    if (Object.keys(user).length) {
+      this.props.addToCartThunk({
+        orderId: Number(
+          this.props.orders.find(
+            order => !order.status && order.userId === user.id
+          ).id
+        ),
+        productId: Number(match.params.id),
+        quantity: Number(this.state.quantity),
+        price: Number((this.price * 100).toFixed(2))
+      })
+    } else {
+      let addedProd = {
+        productId: match.params.id,
+        quantity: Number(this.state.quantity)
+      }
+      const newCart = JSON.parse(localStorage.getItem('cart'))
+      let cartItem = newCart.find(elem => elem.productId === match.params.id)
+      if (cartItem) {
+        newCart.map(elem => {
+          if (elem.productId === match.params.id) {
+            elem.quantity += Number(this.state.quantity)
+            return elem
+          } else return elem
+        })
+      } else {
+        newCart.push(addedProd)
+      }
+      localStorage.setItem('cart', JSON.stringify(newCart))
+    }
     this.props.history.push('/cart')
   }
 
