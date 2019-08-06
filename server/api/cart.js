@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {OrderDetail, Order} = require('../db/models')
+const {OrderDetail, Order, Product} = require('../db/models')
 module.exports = router
 
 router.post('/add', async (req, res, next) => {
@@ -18,8 +18,30 @@ router.post('/add', async (req, res, next) => {
       return res.json(alreadyInCart)
     } else {
       req.body.price = req.body.price * req.body.quantity
-      const product = await OrderDetail.create(req.body)
-      return res.json(product)
+      await OrderDetail.create({
+        quantity: req.body.quantity,
+        price: req.body.price,
+        orderId: req.body.orderId,
+        productId: req.body.productId
+      })
+      const orders = await Order.findAll({
+        include: [
+          {
+            model: Product
+          }
+        ]
+      })
+      const product = orders
+        .find(order => order.id === req.body.orderId)
+        .products.find(jam => jam.id === req.body.productId)
+      const sendDetails = {
+        quantity: req.body.quantity,
+        price: req.body.price,
+        orderId: req.body.orderId,
+        productId: req.body.productId,
+        product: product
+      }
+      return res.json(sendDetails)
     }
   } catch (err) {
     next(err)

@@ -26,7 +26,6 @@ class SingleProduct extends Component {
       quantity: Number(this.state.quantity),
       price: Number((this.price * 100).toFixed(2))
     })
-    this.props.fetchOrders()
     this.props.history.push('/cart')
   }
 
