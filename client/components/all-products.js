@@ -20,18 +20,19 @@ class AllProducts extends React.Component {
                 key={product.id}
                 className="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-3"
               >
-                <div className="card shadow h-100">
-                  <img src={product.imageUrl} className="card-img-top h-75" />
+                <Link to={`/products/${product.id}`} className="card-link">
+                  <div className="card shadow h-100">
+                    <img src={product.imageUrl} className="card-img-top h-75" />
 
-                  <div className="card-body text-center">
-                    <Link to={`/products/${product.id}`} className="card-link">
+                    <div className="card-body text-center">
                       <p className="card-title">{product.name}</p>
-                    </Link>
-                    <p className="card-text font-weight-bold">
-                      ${product.price.toFixed(2)}
-                    </p>
+
+                      <p className="card-text font-weight-bold">
+                        ${product.price.toFixed(2)}
+                      </p>
+                    </div>
                   </div>
-                </div>
+                </Link>
               </div>
             )
           })}
