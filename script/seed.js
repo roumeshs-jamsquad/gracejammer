@@ -57,36 +57,11 @@ const products = [
 const orders = [
   {
     userId: 1,
-    status: true
+    status: false
   },
   {
     userId: 2,
     status: false
-  },
-  {
-    userId: 1,
-    status: false
-  }
-]
-
-const orderDetails = [
-  {
-    orderId: 1,
-    productId: 5,
-    quantity: 5,
-    price: 4825
-  },
-  {
-    orderId: 1,
-    productId: 3,
-    quantity: 10,
-    price: 8750
-  },
-  {
-    orderId: 2,
-    productId: 1,
-    quantity: 7,
-    price: 6755
   }
 ]
 
@@ -108,12 +83,6 @@ async function seed() {
   await Promise.all(
     orders.map(order => {
       return Order.create(order)
-    })
-  )
-
-  await Promise.all(
-    orderDetails.map(orderDetail => {
-      return OrderDetail.create(orderDetail)
     })
   )
 
