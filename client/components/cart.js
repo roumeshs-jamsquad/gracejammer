@@ -55,7 +55,7 @@ export class Cart extends Component {
     if (Object.keys(user).length) {
       this.props.checkoutThunk(orderId)
     }
-    history.push('/home')
+    history.push('/orders')
   }
   handleUpdate(jamId, quantity, jamPrice) {
     const {user, orders, history} = this.props
@@ -70,7 +70,7 @@ export class Cart extends Component {
       let guestCart = JSON.parse(localStorage.getItem('cart'))
       guestCart.map(item => {
         if (Number(item.productId) === Number(jamId)) {
-          item.quantity = quantity
+          item.quantity = Number(quantity)
           return item
         } else return item
       })
