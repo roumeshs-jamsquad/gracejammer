@@ -7,6 +7,7 @@ import {
   checkoutThunk
 } from '../store/orders'
 import {fetchProducts} from '../store/products'
+import {toast, ToastContainer} from 'react-toastify'
 
 export class Cart extends Component {
   constructor(props) {
@@ -24,6 +25,8 @@ export class Cart extends Component {
     this.props.fetchProducts()
   }
 
+  notify = () => toast('Removed Successfully!')
+
   handleClick(jamId) {
     const {orders, user} = this.props
     if (Object.keys(user).length) {
@@ -32,6 +35,7 @@ export class Cart extends Component {
       ).id
 
       this.props.removeFromCart(orderId, jamId)
+      this.notify()
     } else {
       let guestCart = JSON.parse(localStorage.getItem('cart'))
       let removeIdx = 0
@@ -290,6 +294,7 @@ export class Cart extends Component {
                 Checkout
               </button>
             </form>
+            <ToastContainer />
           </div>
         </div>
       </div>

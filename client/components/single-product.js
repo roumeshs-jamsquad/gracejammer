@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {fetchProducts} from '../store/products'
 import {fetchOrders, addToCartThunk} from '../store/orders'
+import {toast, ToastContainer} from 'react-toastify'
 
 class SingleProduct extends Component {
   constructor() {
@@ -12,8 +13,18 @@ class SingleProduct extends Component {
     this.price = 0
   }
 
+  notify = () =>
+    toast('🛒 Item Added!', {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true
+    })
+
   handleAdd = evt => {
-    const {user, match, products} = this.props
+    const {user, match} = this.props
     evt.preventDefault()
     if (Object.keys(user).length) {
       this.props.addToCartThunk({
@@ -44,8 +55,8 @@ class SingleProduct extends Component {
         newCart.push(addedProd)
       }
       localStorage.setItem('cart', JSON.stringify(newCart))
+      // this.props.history.push('/cart')
     }
-    this.props.history.push('/cart')
   }
 
   handleChange = evt => {
@@ -91,9 +102,14 @@ class SingleProduct extends Component {
                     onChange={this.handleChange}
                     className="form-control"
                   />
-                  <button type="submit" className="btn-secondary my-3">
+                  <button
+                    type="submit"
+                    className="btn-secondary my-3"
+                    onClick={this.notify}
+                  >
                     Add To Cart
                   </button>
+                  <ToastContainer />
                 </div>
               </form>
             </div>
