@@ -9,6 +9,9 @@ class AllProducts extends React.Component {
   }
 
   render() {
+    if (!localStorage.getItem('cart')) {
+      localStorage.setItem('cart', JSON.stringify([]))
+    }
     const {allProducts} = this.props
     return (
       <div className="container">
