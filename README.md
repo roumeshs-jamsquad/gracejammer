@@ -22,7 +22,7 @@ Step by step guide for downloading repo:
 ```
 cd <directory you want to download to>
 
-git clone https://github.com/joonhojhan/divlab.git
+git clone https://github.com/daphnelee3/gracejammer.git
 
 cd gracejammer
 
