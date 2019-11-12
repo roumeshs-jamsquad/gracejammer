@@ -8,7 +8,7 @@ class SingleProduct extends Component {
   constructor() {
     super()
     this.state = {
-      quantity: ''
+      quantity: '1'
     }
     this.price = 0
   }
