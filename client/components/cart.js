@@ -40,7 +40,7 @@ export class Cart extends Component {
       let guestCart = JSON.parse(localStorage.getItem('cart'))
       let removeIdx = 0
       guestCart.forEach((item, idx) => {
-        if (item.productId === jamId) {
+        if (item.productId == jamId) {
           removeIdx = idx
         }
       })
